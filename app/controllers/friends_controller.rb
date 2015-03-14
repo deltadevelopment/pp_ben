@@ -64,9 +64,9 @@ class FriendsController < ApplicationController
   end
 
   def accept_request 
-    friend_request = FriendRequest.find_by_user_id_and_friend_id!(params[:id], params[:friend_id]) 
+    friend_request = FriendRequest.find_by_user_id_and_friend_id!(params[:friend_id], params[:id]) 
 
-    return not_authorized unless current_user.id == friend_request.user.id
+    return not_authorized unless current_user.id == friend_request.friend.id
 
     create(friend_request.user_id, friend_request.friend_id)
 
