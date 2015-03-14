@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   post '/login' => 'sessions#create'
   delete '/login' => 'sessions#destroy'
 
-  # Friend Routes
+  # Friends Routes
   post '/user/:id/friend/:friend_id' => 'friends#create_request'
   post '/user/:id/accept_friend/:friend_id' => 'friends#accept_request'
   get '/user/:id/friend_requests' => 'friends#list_requests'
