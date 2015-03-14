@@ -20,7 +20,8 @@ Rails.application.routes.draw do
   delete '/user/:id/friend/:friend_id' => 'friends#destroy'
 
   # Message Routes
-  post 'user/:sender_id/message/:receiver_id' => 'messages#create'
+  post 'user/:sender_id/message/:receiver_id' => 'messages#new'
+  post 'message/:id/reply' => 'messages#reply'
   get 'user/:sender_id/message/:receiver_id' => 'messages#show'
   delete 'message/:id' => 'messages#destroy'
 

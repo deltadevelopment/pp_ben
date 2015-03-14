@@ -12,8 +12,7 @@ class MessagesController < ApplicationController
 
     message.generate_download_uri unless message.media_key.nil?
 
-
-    if parent_message_id.nil?
+    if message.parent_id.nil?
       message.update_attributes(seen: true)
     else
       message.destroy 
@@ -22,17 +21,47 @@ class MessagesController < ApplicationController
     render json: message
   end
 
-  def create
-    message = Message.new(sender_id: params[:sender_id], receiver_id: params[:receiver_id], create_params)
+  def new
+    message = Message.new(create_params)
 
-    return not_authorized unless current_user == User.find(params[:sender_id])
+    sender_id = params[:sender_id]
+    receiver_id = params[:receiver_id]
+
+    message_exists = Message.where(["(sender_id=? AND receiver_id=?) OR (sender_id=? AND receiver_id=?)", 
+                                     sender_id, receiver_id, receiver_id, sender_id])
+
+    message.sender_id = sender_id
+    message.receiver_id = receiver_id
+
+    unless message_exists.empty?
+      return render json: {"error" => "There can only be one active message between two people at one time"}.to_json, status: 400
+    end
+
+    create(message)
+  end
+
+  def reply
+    parent = Message.find(params[:id])
+    message = Message.new(create_params)
+
+    message.sender = parent.receiver 
+    message.receiver = parent.sender
+    message.parent = parent
+
+    create(message)
+
+  end
+
+  def create(message)
+    return not_authorized unless current_user == message.sender
     
     if message.save
       resource_created
     else
-      check_errors_or_500
+      check_errors_or_500(message)
     end  
   end 
+
 
   def generate_upload_url
 
@@ -63,7 +92,7 @@ class MessagesController < ApplicationController
 
   private
 
-  def create_params 
+  def create_params
     params.require(:message).permit(:body, :media_key, :media_type)
   end
 
