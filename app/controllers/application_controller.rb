@@ -41,7 +41,7 @@ class ApplicationController < ActionController::API
   def check_errors_or_500(object)
      
     if(object.errors.messages)
-      render json: object.errors.messages.to_json, status: 400
+      render json: {errors: object.errors.messages}.to_json, status: 400
     else
       render json: {error: "Internal server error"}.to_json, status: 500
     end
