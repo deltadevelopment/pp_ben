@@ -8,6 +8,12 @@ class UsersController < ApplicationController
     render json: user
   end
 
+  def get_by_username
+    user = User.find_by_username!(params[:username])
+    
+    render json: user
+  end
+
   def create
     user = User.new(register_params)
 
