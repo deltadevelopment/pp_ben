@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   # User Routes
   post '/register' => 'users#create'
   get '/user/:id' => 'users#show'
+  get '/user_by_username/:username' => 'users#get_by_username'
   put '/user/:id' => 'users#update'
   delete '/user/:id' => 'users#destroy'
 
@@ -17,6 +18,13 @@ Rails.application.routes.draw do
   get '/user/:id/friends' => 'friends#list'
 
   delete '/user/:id/friend/:friend_id' => 'friends#destroy'
+
+  # Message Routes
+  post 'user/:sender_id/message/:receiver_id' => 'messages#create'
+  get 'user/:sender_id/message/:receiver_id' => 'messages#show'
+
+  # Upload 
+  get 'message/generate_upload_url' => 'messages#generate_upload_url'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
