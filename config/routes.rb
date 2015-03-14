@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   # Message Routes
   post 'user/:sender_id/message/:receiver_id' => 'messages#create'
   get 'user/:sender_id/message/:receiver_id' => 'messages#show'
+  delete 'message/:id' => 'messages#destroy'
 
   # Upload 
   get 'message/generate_upload_url' => 'messages#generate_upload_url'

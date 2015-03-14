@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150314114040) do
+ActiveRecord::Schema.define(version: 20150314182524) do
 
   create_table "friend_requests", force: :cascade do |t|
     t.integer  "user_id"
@@ -25,6 +25,18 @@ ActiveRecord::Schema.define(version: 20150314114040) do
     t.integer  "friend_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.string   "body"
+    t.integer  "media_type",        default: 0
+    t.string   "media_key"
+    t.integer  "sender_id"
+    t.integer  "receiver_id"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.boolean  "seen"
+    t.integer  "parent_message_id"
   end
 
   create_table "sessions", force: :cascade do |t|
