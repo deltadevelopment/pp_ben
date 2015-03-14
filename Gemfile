@@ -7,8 +7,19 @@ gem 'rails-api'
 
 gem 'spring', :group => :development
 
+gem 'active_model_serializers'
 
-gem 'sqlite3'
+gem 'bcrypt'
+
+gem 'pg'
+
+gem 'aws-sdk', '~> 2'
+
+group :development, :test do
+  gem 'sqlite3'
+  gem 'pry-rails'
+  gem 'pry-byebug'
+end
 
 
 

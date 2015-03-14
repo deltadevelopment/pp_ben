@@ -10,7 +10,6 @@ class UsersController < ApplicationController
 
   def create
     user = User.new(register_params)
-    status = StatusesController.new
 
     if user.save
       session = Session.new
@@ -19,11 +18,7 @@ class UsersController < ApplicationController
 
       user.auth_token = session.auth_token
       
-      if status.create(user.id)
-        render json: {success: "Resource created", user: remove_unsafe_keys(user) }.to_json, status: 201
-      else
-        resource_could_not_be_created 
-      end
+      render json: {success: "Resource created", user: remove_unsafe_keys(user) }.to_json, status: 201
     else
       check_errors_or_500(user)
     end
@@ -47,8 +42,6 @@ class UsersController < ApplicationController
     user = User.find_by_id(params[:id])
 
     return not_authorized unless current_user == user
-
-    status = Status.find_by_user_id(user.id) 
 
     if user.destroy
       render json: {success: "User deleted"}.to_json
@@ -77,7 +70,7 @@ class UsersController < ApplicationController
   
 
   def remove_unsafe_keys(user)
-    user.slice('id', 'display_name', 'username', 'auth_token')
+    user.slice('id', 'username', 'auth_token')
   end
 
   def register_params 
