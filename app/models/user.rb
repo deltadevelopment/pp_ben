@@ -1,8 +1,10 @@
 class User < ActiveRecord::Base
   
-  attr_accessor :password, :auth_token
+  attr_accessor :password, :auth_token, :is_requester
 
   has_one :session
+
+  has_many :friends
   
   before_save :encrypt_password
 

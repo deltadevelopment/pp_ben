@@ -10,7 +10,13 @@ Rails.application.routes.draw do
   post '/login' => 'sessions#create'
   delete '/login' => 'sessions#destroy'
 
+  # Friend Routes
+  post '/user/:id/friend/:friend_id' => 'friends#create_request'
+  post '/user/:id/accept_friend/:friend_id' => 'friends#accept_request'
+  get '/user/:id/friend_requests' => 'friends#list_requests'
+  get '/user/:id/friends' => 'friends#list'
 
+  delete '/user/:id/friend/:friend_id' => 'friends#destroy'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
