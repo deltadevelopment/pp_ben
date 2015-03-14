@@ -53,6 +53,9 @@ class FriendsController < ApplicationController
     request2 = FriendRequest.where(user_id: friend.id, friend_id: user.id)
 
     return not_authorized unless current_user == user
+
+    return render json: {"error" => "You can not follow yourself"}.to_json if user == friend
+
     
     if request1.empty? and request2.empty?
       request_created if FriendRequest.create(user_id: user.id, friend_id: friend.id)
