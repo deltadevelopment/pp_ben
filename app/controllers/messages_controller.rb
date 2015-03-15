@@ -6,7 +6,7 @@ class MessagesController < ApplicationController
     message = Message.find_by!(:sender_id => params[:sender_id], :receiver_id => params[:receiver_id])
 
     sender = User.find(params[:sender_id])
-    receiever = User.find(params[:receiver_id])
+    receiver = User.find(params[:receiver_id])
 
     return not_authorized unless current_user == sender or current_user == receiver
 
@@ -20,6 +20,26 @@ class MessagesController < ApplicationController
 
     render json: message
   end
+
+  def list
+    friends = Friend.where(["user_id=? OR friend_id=?", params[:id], params[:id]])
+    user_id = params[:id]
+
+    ids = []
+    
+    friends.each do |fr|
+      ids.push fr.user.id unless fr.user == current_user
+      ids.push fr.friend.id unless fr.friend == current_user 
+    end     
+
+    ids_str = ids.join(", ")
+    
+    messages = Message.where(["(sender_id=? OR receiver_id=?) AND (sender_id IN (?) OR receiver_id IN (?))", user_id, user_id, ids, ids])
+
+    render json: messages, each_serializer: MessageSerializer
+    
+  end
+
 
   def new
     message = Message.new(create_params)
@@ -61,6 +81,8 @@ class MessagesController < ApplicationController
       check_errors_or_500(message)
     end  
   end 
+
+  
 
 
   def generate_upload_url

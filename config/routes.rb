@@ -25,6 +25,8 @@ Rails.application.routes.draw do
   get 'user/:sender_id/message/:receiver_id' => 'messages#show'
   delete 'message/:id' => 'messages#destroy'
 
+  get 'user/:id/messages' => 'messages#list'
+
   # Upload 
   get 'message/generate_upload_url' => 'messages#generate_upload_url'
 
