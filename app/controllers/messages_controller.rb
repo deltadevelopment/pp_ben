@@ -25,16 +25,7 @@ class MessagesController < ApplicationController
     friends = Friend.where(["user_id=? OR friend_id=?", params[:id], params[:id]])
     user_id = params[:id]
 
-    ids = []
-    
-    friends.each do |fr|
-      ids.push fr.user.id unless fr.user == current_user
-      ids.push fr.friend.id unless fr.friend == current_user 
-    end     
-
-    ids_str = ids.join(", ")
-    
-    messages = Message.where(["(sender_id=? OR receiver_id=?) AND (sender_id IN (?) OR receiver_id IN (?))", user_id, user_id, ids, ids])
+    messages = Message.where(["(sender_id=? OR receiver_id=?)", user_id, user_id])
 
     render json: messages, each_serializer: MessageSerializer
     
