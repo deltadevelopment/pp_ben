@@ -4,8 +4,6 @@ class User < ActiveRecord::Base
 
   has_one :session
 
-  has_many :friends
-  
   before_save :encrypt_password
 
   validates :username, length: { in: 1..20, message: "must be between 1 and 15 characters" }

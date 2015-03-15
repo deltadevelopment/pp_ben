@@ -50,6 +50,12 @@ class UsersController < ApplicationController
     return not_authorized unless current_user == user
 
     if user.destroy
+      friends = Friend.where(["user_id=? OR friend_id=?", params[:id], params[:id])
+
+      unless friends.empty?
+        friends.each { |fr| fr.destroy }
+      end
+
       render json: {success: "User deleted"}.to_json
     else
       # TODO: Should be logged
