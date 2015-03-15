@@ -1,5 +1,5 @@
 class MessageSerializer < ActiveModel::Serializer
-  attributes :id, :sender_id, :receiver_id, :media_type, :seen, :parent_id, :media_url
+  attributes :id, :sender_id, :receiver_id, :media_type, :seen, :parent_id, :media_url, :body
   
     
   def attributes
