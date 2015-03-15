@@ -18,7 +18,7 @@ class MessagesController < ApplicationController
       message.destroy 
     end
 
-    render json: message
+    render json: message, serializer: MessageSerializer
   end
 
   def list
@@ -27,7 +27,7 @@ class MessagesController < ApplicationController
 
     messages = Message.where(["(sender_id=? OR receiver_id=?)", user_id, user_id])
 
-    render json: messages, each_serializer: MessageSerializer
+    render json: messages, each_serializer: MessagesSerializer
     
   end
 
