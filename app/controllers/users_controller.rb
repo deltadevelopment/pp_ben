@@ -50,7 +50,7 @@ class UsersController < ApplicationController
     return not_authorized unless current_user == user
 
     if user.destroy
-      friends = Friend.where(["user_id=? OR friend_id=?", params[:id], params[:id])
+      friends = Friend.where(["user_id=? OR friend_id=?", params[:id], params[:id]])
 
       unless friends.empty?
         friends.each { |fr| fr.destroy }
