@@ -15,6 +15,8 @@ gem 'pg'
 
 gem 'aws-sdk', '~> 2'
 
+gem 'rails_stdout_logging'
+
 group :development, :test do
   gem 'sqlite3'
   gem 'pry-rails'
