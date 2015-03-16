@@ -61,7 +61,7 @@ class MessagesController < ApplicationController
     message.receiver = parent.sender
     message.parent = parent
 
-    message_with_same_parent_exists = Message.where(parent_id: message.id).take
+    message_with_same_parent_exists = Message.where(parent_id: message.id)
 
     unless message_with_same_parent_exists.empty?
       return render json: {"error" => "This message has already been replied to"}.to_json, status: 400
