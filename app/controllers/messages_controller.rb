@@ -23,7 +23,10 @@ class MessagesController < ApplicationController
 
   def list
     friends = Friend.where(["user_id=? OR friend_id=?", params[:id], params[:id]])
+    user = User.find(params[:id])
     user_id = params[:id]
+
+    return not_authorized unless current_user == user
 
     messages = Message.where(["(sender_id=? OR receiver_id=?)", user_id, user_id])
 
@@ -31,20 +34,19 @@ class MessagesController < ApplicationController
     
   end
 
-
   def new
     message = Message.new(create_params)
 
     sender_id = params[:sender_id]
     receiver_id = params[:receiver_id]
 
-    message_exists = Message.where(["(sender_id=? AND receiver_id=?) OR (sender_id=? AND receiver_id=?)", 
+    messages = Message.where(["(sender_id=? AND receiver_id=?) OR (sender_id=? AND receiver_id=?)", 
                                      sender_id, receiver_id, receiver_id, sender_id])
 
     message.sender_id = sender_id
     message.receiver_id = receiver_id
 
-    unless message_exists.empty?
+    unless messages.empty?
       return render json: {"error" => "There can only be one active message between two people at one time"}.to_json, status: 400
     end
 
@@ -58,6 +60,12 @@ class MessagesController < ApplicationController
     message.sender = parent.receiver 
     message.receiver = parent.sender
     message.parent = parent
+
+    message_with_same_parent_exists = Message.find(parent_id: message.id)
+
+    unless message_with_same_parent_exists.nil?
+      return render json: {"error" => "This message has already been replied to"}.to_json, status: 400
+    end
 
     create(message)
 
