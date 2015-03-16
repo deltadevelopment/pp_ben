@@ -35,9 +35,9 @@ class FriendsController < ApplicationController
       requests.push(tr.user)
     end
 
-    return not_authorized unless current_user == user
 
     unless their_requests.empty? and your_requests.empty?
+      return not_authorized unless current_user == user
       render json: requests, each_serializer: FriendRequestSerializer
     else
       record_not_found
